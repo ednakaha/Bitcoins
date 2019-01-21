@@ -1,0 +1,23 @@
+<div class="card" style="width: 18rem;">
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="customSwitches">
+        <label class="custom-control-label" for="customSwitches"></label>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{symbol}}</h5>
+        <p class="card-text">{{name}}</p>
+    </div>
+    <div>
+        <p>
+            <button class="btn btn-primary collapse-btn" type="button" data-toggle="collapse" data-target="#{{id}}"
+                aria-expanded="false" aria-controls="collapseTar">
+                MoreInfo
+            </button>
+        </p>
+        <div class="panel-collapse collapse" id="{{id}}">
+            <div class="card card-body">
+              
+            </div>
+        </div>
+    </div>
+</div>
