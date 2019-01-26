@@ -14,26 +14,33 @@
 
 <body>
     <div class="container">
-        <form>
-            <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul id="mainNav" class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="tempBaseCoins">Coins </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Real-time reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tempAbout">About</a>
+                    </li>
 
-                <div class="col-6 p-5">
-                    <span>
-                        <button type="button" id="partButton" class="btn btn-primary">load</button>
-                        <button type="button" id="filterButton" class="btn btn-primary" value="filter">Filter</button>
-                        <input id="searchInput" placeholder="search...">
-                    </span>
-                </div>
+                </ul>
+
             </div>
-            <hr>
-            <div id="content" class="row">
-               
+        </nav>
+        <form>
+            <div id="mainContent" class="row">
+              
             </div>
         </form>
-        </div>
+    </div>
 
 
-        <script src="script.js"></script>
+    <script src="script.js"></script>
+    <script src="scriptCoins.js"></script>
 
 
 </body>
