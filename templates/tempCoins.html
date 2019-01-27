@@ -1,12 +1,15 @@
 <div class="col-md-4 p-2">
     <div class="card">
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitches">
-            <label class="custom-control-label" for="customSwitches"></label>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">{{symbol}}</h5>
-            <p class="card-text">{{name}}</p>
+        <div class="row p-3">
+
+            <div class="col-md-8 card-body">
+                <h5 class="card-title">{{symbol}}</h5>
+                <p class="card-text">{{name}}</p>
+            </div>
+            <div class="p-2 custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitches{{id}}">
+                <label class="custom-control-label" for="customSwitches{{id}}"></label>
+            </div>
         </div>
         <div class="p-3">
             <button class="btn btn-primary collapse-btn " type="button" data-toggle="collapse" data-target="#{{id}}" aria-expanded="false"
