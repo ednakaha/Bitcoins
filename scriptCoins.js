@@ -100,7 +100,7 @@ function doBaseApi() {
             doMoreInfo(this.id)
         });
         $('.panel-collapse.collapse').on("hidden.bs.collapse", function () {
-            changeProgressBar(0);
+       //     changeProgressBar(0);
         });
 
     });
