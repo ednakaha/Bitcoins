@@ -2,6 +2,7 @@
 var TemplateCoins;
 var MainData;
 
+//TODO:CACHE
 
 $.ajax({
     url: '/templates/tempCoins.html',
@@ -12,7 +13,6 @@ $.ajax({
 
 
 $("#mainContent").on("click", "#loadButton", function () {
-    //  alert("success");
     doBaseApi();
 });
 
@@ -34,7 +34,7 @@ function ChangeStatusFilter() {
         $('#searchInput').val('');
         //hidden message
         $('#foundMessage').addClass('invisible').removeClass('visible');
-        changeProgressBar(0);
+      //  changeProgressBar(0);
     }
 }
 
@@ -56,7 +56,7 @@ $("#mainContent").on("click", "#filterButton", function () {
         }
         else { alert('Please fill search word') }
     }
-    else //on unFilter mode
+    else //on cancel Filter mode
     {
         doFilter(null);
         ChangeStatusFilter();

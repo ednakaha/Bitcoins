@@ -9,13 +9,14 @@
     <link href='node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet'>
     <script src='node_modules/jquery/dist/jquery.min.js'></script>
     <script src='node_modules/bootstrap/dist/js/bootstrap.min.js'></script>
-  
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 
 </head>
 
 <body>
-    <div class="container">
-     
+    <div class="container" id="base">
+
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul id="mainNav" class="navbar-nav mr-auto">
@@ -23,7 +24,7 @@
                         <a class="nav-link" href="tempBaseCoins">Coins </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Real-time reports</a>
+                        <a class="nav-link" href="tempChart">Real-time reports</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="tempAbout">About</a>
@@ -33,12 +34,24 @@
 
             </div>
         </nav>
-        <div class="progress invisible">
-            <div id="dynamic" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
-                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                <span id="current-progress"></span>
-            </div>
-        </div>
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+<!--Progress bar on model-->
+        <div class="modal fade progress"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <div class="progress">
+                        <div id="dynamic" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                          <span id="current-progress" class="sr-only"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+        
 
         <form>
             <div id="mainContent" class="row">
@@ -46,31 +59,30 @@
             </div>
         </form>
     </div>
-
-    <div class="modal" tabindex="-1" role="dialog" id=dialog>
+<!--selected coins modal-->
+    <div class=" modal" tabindex="-1" role="dialog" id="modalCoins">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <div class="col-md-6 modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Selected coins</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class=" modal-body" id='ModalContent'>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-body" id='dialogContent'>
-              <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary">Save changes</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-    <script src="scriptReport.js"></script>
+
     <script src="script.js"></script>
     <script src="scriptCoins.js"></script>
-
+    <script src="scriptSelCoins.js"></script>
+    <script src="scriptReport.js"></script>
 
 
 </body>

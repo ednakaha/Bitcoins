@@ -22,13 +22,15 @@ $('#mainNav>li>a').click(function (e) {
             if (href === 'tempAbout') {
                 changeProgressBar(100);
             }
+            if (href === 'tempChart') {
+                changeProgressBar(100);
+            }
 
-            selectedToggleArr = [];//for toggle -count selected reports
+            selectedToggleArr = [];//for toggle -count selected coins
         })
 });
 
 function changeProgressBar(current_progress) {
-    //TODO: float progreesbar
     //TODO: cache local
     $("#dynamic")
         .css("width", current_progress + "%")
@@ -36,13 +38,13 @@ function changeProgressBar(current_progress) {
         .text(current_progress + "% Complete")
 
     if (current_progress === 0) {
-        $('.progress').addClass('visible').removeClass('invisible');
+        $('.progress').modal();
     }
     if (current_progress === 100) {
         setTimeout(function () {
-            $('.progress').addClass('invisible').removeClass('visible');
+             $('.progress').modal("hide");
          //   changeProgressBar(0);
-        }, 1500)
+        }, 750)
     }
 
 }
@@ -61,7 +63,7 @@ $.ajax({
 
 
 $("#mainContent").on("click", "#buttonAbout", function () {
-    alert("success");
+
 });
 
 
