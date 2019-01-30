@@ -23,6 +23,7 @@ $('#mainNav>li>a').click(function (e) {
                 changeProgressBar(100);
             }
             if (href === 'tempChart') {
+                loadChart();
                 changeProgressBar(100);
             }
 

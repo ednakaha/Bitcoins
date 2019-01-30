@@ -1,10 +1,24 @@
-window.onload = function() {
-    $.getJSON("myphpService.php", function(result){
+function loadChart(){
+    //set the selected coins for pricemulti
+    let selCoinsSymbol='';
+    let initial = 'customSwitches';
+    let symbolTitle;
+    
+    for(var i=0; i<selectedToggleArr.length;i++) {
+        symbolTitle= selectedToggleArr[i].substring(initial.length);//just the symbol
+        selCoinsSymbol+=','+ symbolTitle;
+    }
+    //remove first ,
+    selCoinsSymbol= selCoinsSymbol.substring(1).toUpperCase();
+    $.getJSON('https://min-api.cryptocompare.com/data/pricemulti?fsyms='+selCoinsSymbol+'&tsyms=USD', function(result){
         var dps= [];
-        
+      
+        debugger;
+       
         //Insert Array Assignment function here
-        for(var i=0; i<result.length;i++) {
-            dps.push({"label":result[i].ts, "y":result[i].d1});
+        for(var i=0; i< obj.length;i++) {
+            debugger;
+            dps.push({"label":obj[i].ts, "y":obj[i].d1});
         }
         
         //Insert Chart-making function here
