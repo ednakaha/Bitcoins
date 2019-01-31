@@ -17,7 +17,7 @@ $('#mainNav>li>a').click(function (e) {
 
             if (href === 'tempBaseCoins') {
                 changeProgressBar(50);
-                doBaseApi();//load data on scriptCoind.js            
+                if selectedToggleArr - empty TODO  doBaseApi();//load data on scriptCoind.js            
             }
             if (href === 'tempAbout') {
                 changeProgressBar(100);
@@ -27,7 +27,7 @@ $('#mainNav>li>a').click(function (e) {
                 changeProgressBar(100);
             }
 
-            selectedToggleArr = [];//for toggle -count selected coins
+            // selectedToggleArr = [];//for toggle -count selected coins
         })
 });
 

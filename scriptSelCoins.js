@@ -3,7 +3,7 @@ var selectedToggleArr = [];
 var tempToggleDialog;
 var lastSelectedCoinId;
 
-
+//TODO: array selected coins on refresh
 $.ajax({
     url: '/templates/tempSelCoinsModal.html',
     success: function (data) {
@@ -91,6 +91,7 @@ $("#modalCoins").on("click", ".toggleModal", function (e) {
         $('#' + lastSelectedCoinId).attr("disabled", true);
         //4 - add the last selected toggle  to array
         selectedToggleArr.push(lastSelectedCoinId);
+        
 
         //5 - close modal
         $('#modalCoins').modal("hide");
