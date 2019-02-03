@@ -16,8 +16,9 @@ $('#mainNav>li>a').click(function (e) {
             $('#mainContent').html(htmlData);
 
             if (href === 'tempBaseCoins') {
+                
                 changeProgressBar(50);
-                if selectedToggleArr - empty TODO  doBaseApi();//load data on scriptCoind.js            
+                doBaseApi();//load data on scriptCoind.js   
             }
             if (href === 'tempAbout') {
                 changeProgressBar(100);
@@ -43,8 +44,8 @@ function changeProgressBar(current_progress) {
     }
     if (current_progress === 100) {
         setTimeout(function () {
-             $('.progress').modal("hide");
-         //   changeProgressBar(0);
+            $('.progress').modal("hide");
+            //   changeProgressBar(0);
         }, 750)
     }
 

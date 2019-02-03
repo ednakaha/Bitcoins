@@ -12,10 +12,6 @@ $.ajax({
 });
 
 
-$("#mainContent").on("click", "#loadButton", function () {
-    doBaseApi();
-});
-
 
 function ChangeStatusFilter() {
     if ($('#filterButton').val() === "filter") {
@@ -34,7 +30,6 @@ function ChangeStatusFilter() {
         $('#searchInput').val('');
         //hidden message
         $('#foundMessage').addClass('invisible').removeClass('visible');
-      //  changeProgressBar(0);
     }
 }
 
@@ -64,6 +59,21 @@ $("#mainContent").on("click", "#filterButton", function () {
 });
 
 
+function loadPageCoins() {
+    for (i = 0; i < 100; i++) {
+        fillContent(MainData[i]);
+    }
+
+    changeProgressBar(100);
+    //*****More Info Button */
+    $('.panel-collapse.collapse').on("show.bs.collapse", function () {
+        doMoreInfo(this.id)
+    });
+    $('.panel-collapse.collapse').on("hidden.bs.collapse", function () {
+        //     changeProgressBar(0);
+    });
+
+}
 function fillContent(DataRow) {
     let t = TemplateCoins;
     let regexSymbol = /{{symbol}}/g;
@@ -77,6 +87,7 @@ function fillContent(DataRow) {
 
 
 function doBaseApi() {
+    
     $('#content').empty();
     //TODO:change url
     let selUrl = "tempData/baseData.json";
@@ -88,24 +99,25 @@ function doBaseApi() {
     }).done(function (d) {
         if (typeof d === 'string')
             d = JSON.parse(d);
+        
         MainData = d;
-
-        for (i = 0; i < 100; i++) {
-            fillContent(d[i]);
+        loadPageCoins();
+        if (selectedToggleArr.length > 0) { //Not first loading 
+            checkedSelectedCoins();
         }
+    });  
 
-        changeProgressBar(100);
-        //*****More Info Button */
-        $('.panel-collapse.collapse').on("show.bs.collapse", function () {
-            doMoreInfo(this.id)
-        });
-        $('.panel-collapse.collapse').on("hidden.bs.collapse", function () {
-       //     changeProgressBar(0);
-        });
-
-    });
 }
 
+function checkedSelectedCoins(){
+    for (i=0;i<selectedToggleArr.length;i++){
+
+    $('#' +selectedToggleArr[i]).attr("disabled", true);
+    $('#' +selectedToggleArr[i]).prop("checked", true);
+    }
+    
+
+}
 function doFilter(subStr) {
     $('#content').empty();
 
@@ -118,9 +130,6 @@ function doFilter(subStr) {
             fillContent(MainData[i]);
         }
         else {//Filter
-            // if (MainData[i]['id'].indexOf(subStr) > -1) {
-            //TODO: SYMBOL OR ID? WHOLE WORD?
-            //   debugger;
             var reg = new RegExp("\\b" + subStr + "\\b", "g");
             var hits = MainData[i]['symbol'].match(reg);
             //  if (MainData[i]['symbol'].indexOf(reg) > -1) {

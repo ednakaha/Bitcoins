@@ -1,6 +1,7 @@
 
 let coinsData = [];
 
+
 function loadChart() {
     //set the selected coins for pricemulti
     coinsData = []
@@ -13,22 +14,23 @@ function refreshDataPoints(symbolTitles) {
     let dateTimeNow = d;//.toLocaleTimeString();//d.toISOString().slice(0,16);
 
     $.getJSON('https://min-api.cryptocompare.com/data/pricemulti?fsyms=' + symbolTitles.join(',') + '&tsyms=USD', function (result) {
-      //  debugger;
+        //  debugger;
         for (const prop in result) {
-         // coinsData[coinsData.find( i => i.name === prop )].dataPoints.push({
-            coinsData.find( i => i.name === prop ).dataPoints.push({       
-              x:dateTimeNow,
-              y:result[prop].USD        
-             
-          })
-               
+            coinsData.find(i => i.name === prop).dataPoints.push({
+                x: dateTimeNow,
+                y: result[prop].USD
+
+            })
+
         }
     });
 }
 
 function loadDataChart(selectedToggleArr) {
-    var initial = 'customSwitches';
-    var symbolTitles = [];
+    let initial = 'customSwitches';
+    let symbolTitles = [];
+    let chart;
+
     for (var i = 0; i < selectedToggleArr.length; i++) {
         symbolTitle = selectedToggleArr[i].substring(initial.length);//just the symbol
         symbolTitles.push(symbolTitle.toUpperCase());
@@ -48,14 +50,9 @@ function loadDataChart(selectedToggleArr) {
             });
         }
 
-        setInterval(function () {
-            refreshDataPoints(symbolTitles);
-            chart.render();
-        }, 2000);
-
 
         //Insert Chart-making function here
-        var chart = new CanvasJS.Chart("chartContainer", {
+         chart = new CanvasJS.Chart("chartContainer", {
             zoomEnabled: true,
             panEnabled: true,
             animationEnabled: true,
@@ -73,10 +70,23 @@ function loadDataChart(selectedToggleArr) {
             },
 
             data: coinsData
+
         });
+        //first time
+        refreshDataPoints(symbolTitles);
         chart.render();
 
+        //interval
+        setInterval(function () {
+            refreshDataPoints(symbolTitles);
+            chart.render();
+        }, 2000);
     });
+
+//TODO: arrray datacoins if main array changed
+//TODO: progress bar
+
+
 }
 
 
