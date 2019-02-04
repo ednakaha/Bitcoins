@@ -3,7 +3,7 @@ var selectedToggleArr = [];
 var tempToggleDialog;
 var lastSelectedCoinId;
 
-//TODO: array selected coins on refresh
+
 $.ajax({
     url: '/templates/tempSelCoinsModal.html',
     success: function (data) {
@@ -16,13 +16,12 @@ $.ajax({
 $("#mainContent").on("click", ".toggleMainCoins", function () {
     if ($(this).prop("checked")) {
         //until 5 selected
-        if (selectedToggleArr.length < 5) { 
+        if (selectedToggleArr.length < 5) {
             //save the selected's id
 
             selectedToggleArr.push($(this)[0].id);
             //Avoid canceling selection
             ($('#' + $(this)[0].id)).attr("disabled", true);
-
         }
         else {//popup modalCoins & save the sixth
             lastSelectedCoinId = $(this)[0].id;
@@ -41,14 +40,13 @@ $('#modalCoins').on('hidden.bs.modal', function () {
     if (!($('#' + lastSelectedCoinId).attr("disabled"))) {
         $('#' + lastSelectedCoinId).prop("checked", false);
     }
-
+  
     $('#ModalContent').empty();
 })
 
 function loadModalSelCoins() {
 
     $('#ModalContent').empty();
-    //TODO: progress
     for (i = 0; i < (selectedToggleArr.length); i++) {
         fillModalContent(selectedToggleArr[i]);
     }
@@ -73,7 +71,6 @@ function fillModalContent(DataRow) {
 //******MODAL */
 //uncheck toggle - Remove/Add new selected coin
 $("#modalCoins").on("click", ".toggleModal", function (e) {
-    debugger;
     //toggle name on main screen and Modal are not equal...
     // toggleName = ModalcustomSwitches+ $(this)[0].id;
     // toggleOnBaseName =customSwitches+ $(this)[0].id;
@@ -91,7 +88,7 @@ $("#modalCoins").on("click", ".toggleModal", function (e) {
         $('#' + lastSelectedCoinId).attr("disabled", true);
         //4 - add the last selected toggle  to array
         selectedToggleArr.push(lastSelectedCoinId);
-        
+
 
         //5 - close modal
         $('#modalCoins').modal("hide");
@@ -101,14 +98,5 @@ $("#modalCoins").on("click", ".toggleModal", function (e) {
 
 });
 
-/*
-function refreshModal() {
-    if ((selectedToggleArr.length) > 0)
-        loadModalSelCoins();
-    else //close modal
-    {
-        $('#modalCoins').modal("hide");
-    }
-/*
-}
+
 //***********END MODAL */

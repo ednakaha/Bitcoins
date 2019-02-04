@@ -1,20 +1,22 @@
-
 let coinsData = [];
 
 
 function loadChart() {
     //set the selected coins for pricemulti
-    coinsData = []
-    loadDataChart(selectedToggleArr);
+    //    coinsData = [];
+    if (selectedToggleArr.length === 0) {
+        alert("there is no data to show")
+        changeProgressBar(100);
+    }
+    else loadDataChart(selectedToggleArr);
 
 
 }
-function refreshDataPoints(symbolTitles) {
+function refreshDataPoints(symbolTitels) {
     let d = new Date();
-    let dateTimeNow = d;//.toLocaleTimeString();//d.toISOString().slice(0,16);
-
-    $.getJSON('https://min-api.cryptocompare.com/data/pricemulti?fsyms=' + symbolTitles.join(',') + '&tsyms=USD', function (result) {
-        //  debugger;
+    let dateTimeNow = d;
+    $.getJSON('https://min-api.cryptocompare.com/data/pricemulti?fsyms=' + symbolTitels.join(',') + '&tsyms=USD', function (result) {
+        
         for (const prop in result) {
             coinsData.find(i => i.name === prop).dataPoints.push({
                 x: dateTimeNow,
@@ -28,17 +30,16 @@ function refreshDataPoints(symbolTitles) {
 
 function loadDataChart(selectedToggleArr) {
     let initial = 'customSwitches';
-    let symbolTitles = [];
+    let symbolTitels = [];
     let chart;
 
     for (var i = 0; i < selectedToggleArr.length; i++) {
         symbolTitle = selectedToggleArr[i].substring(initial.length);//just the symbol
-        symbolTitles.push(symbolTitle.toUpperCase());
+        symbolTitels.push(symbolTitle.toUpperCase());
     }
 
 
-    $.getJSON('https://min-api.cryptocompare.com/data/pricemulti?fsyms=' + symbolTitles.join(',') + '&tsyms=USD', function (result) {
-
+    $.getJSON('https://min-api.cryptocompare.com/data/pricemulti?fsyms=' + symbolTitels.join(',') + '&tsyms=USD', function (result) {
         for (const prop in result) {
             coinsData.push({
                 type: "line",
@@ -57,7 +58,7 @@ function loadDataChart(selectedToggleArr) {
             panEnabled: true,
             animationEnabled: true,
             title: {
-                text: symbolTitles.join(',') + " to USD"
+                text: symbolTitels.join(',') + " to USD"
             },
 
             axisX: {
@@ -73,18 +74,17 @@ function loadDataChart(selectedToggleArr) {
 
         });
         //first time
-        refreshDataPoints(symbolTitles);
+
+        refreshDataPoints(symbolTitels);
         chart.render();
+        changeProgressBar(100);
 
         //interval
-        setInterval(function () {
-            refreshDataPoints(symbolTitles);
+        chartIntervalId =  setInterval(function () {
+            refreshDataPoints(symbolTitels);
             chart.render();
         }, 2000);
     });
-
-//TODO: arrray datacoins if main array changed
-//TODO: progress bar
 
 
 }

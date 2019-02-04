@@ -1,4 +1,4 @@
-
+var chartIntervalId; //chart interval
 //************NavBar *********
 //Coins
 $('#mainNav>li>a').click(function (e) {
@@ -8,15 +8,16 @@ $('#mainNav>li>a').click(function (e) {
     const href = $(this).attr('href');
     changeProgressBar(20);
     $.ajax('/templates/' + href + '.html')
-
-        //TODO: check - function?
-        //$.ajax('/templates/{href}.html')
         .done(function (htmlData) {
             changeProgressBar(40);
+            $('#mainContent').empty();
             $('#mainContent').html(htmlData);
 
+            clearInterval(chartIntervalId);//stop chart interval
+
+
             if (href === 'tempBaseCoins') {
-                
+
                 changeProgressBar(50);
                 doBaseApi();//load data on scriptCoind.js   
             }
@@ -25,10 +26,8 @@ $('#mainNav>li>a').click(function (e) {
             }
             if (href === 'tempChart') {
                 loadChart();
-                changeProgressBar(100);
-            }
 
-            // selectedToggleArr = [];//for toggle -count selected coins
+            }
         })
 });
 
@@ -45,8 +44,7 @@ function changeProgressBar(current_progress) {
     if (current_progress === 100) {
         setTimeout(function () {
             $('.progress').modal("hide");
-            //   changeProgressBar(0);
-        }, 750)
+        }, 500)
     }
 
 }
