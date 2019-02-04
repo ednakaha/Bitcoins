@@ -3,8 +3,6 @@ var TemplateCoins;
 var MainData;
 window.cacheObj = window.cacheObj || {};
 
-//TODO:CACHE
-
 $.ajax({
     url: '/templates/tempCoins.html',
     success: function (data) {
@@ -24,7 +22,7 @@ function ChangeStatusFilter() {
         $('#foundMessage').addClass('visible').removeClass('invisible');
     }
     else {
-        //button filter
+        //button cancel filter
         $('#filterButton')
             .html('Filter')
             .val('filter');
@@ -71,7 +69,6 @@ function loadPageCoins() {
         doMoreInfo(this.id)
     });
     $('.panel-collapse.collapse').on("hidden.bs.collapse", function () {
-        //     changeProgressBar(0);
     });
 
 }
@@ -112,7 +109,6 @@ function doBaseApi() {
 
 function checkedSelectedCoins() {
     for (i = 0; i < selectedToggleArr.length; i++) {
-
         $('#' + selectedToggleArr[i]).attr("disabled", true);
         $('#' + selectedToggleArr[i]).prop("checked", true);
     }
@@ -121,7 +117,6 @@ function checkedSelectedCoins() {
 }
 function doFilter(subStr) {
     $('#content').empty();
-
     let founded = 0;
 
     for (i = 0; i < 100; i++) {
@@ -133,7 +128,7 @@ function doFilter(subStr) {
         else {//Filter
             var reg = new RegExp("\\b" + subStr + "\\b", "g");
             var hits = MainData[i]['symbol'].match(reg);
-            //  if (MainData[i]['symbol'].indexOf(reg) > -1) {
+
             if (hits != null) {
                 fillContent(MainData[i]);
                 founded++;
@@ -143,13 +138,15 @@ function doFilter(subStr) {
     //found message
     if (subStr != null) {
         $('#foundMessage').text(founded + ' matches found');
+    } else { //after cancel filter, check all selected toggle
+        checkedSelectedCoins(); //checked the selected's toggle
     }
+
     //*****More Info Button */
     $('.panel-collapse.collapse').on("show.bs.collapse", function () {
         doMoreInfo(this.id)
     });
     $('.panel-collapse.collapse').on("hidden.bs.collapse", function () {
-        changeProgressBar(0);
     });
 
 
@@ -163,16 +160,14 @@ function fillTemplate(d, coinId) {
     t = t.replace('{{ils}}', d.market_data.current_price.ils);
 
     $('#' + coinId + ' .card').html(t);
+    changeProgressBar(100);
 }
-function getProjectsFromServer(callback) {
-    $.ajax('http://localhost:3000/project').done(function (d) {
-        callback(d);
-    });
 
-
+function getProjectsFromServer(coinId) {
     let selUrl = "/tempData/moreInfoBitcoin.json";
     //TODO:change url
     // let selUrl = "https://api.coingecko.com/api/v3/coins/" + coinId;
+
 
     changeProgressBar(0);
 
@@ -180,41 +175,38 @@ function getProjectsFromServer(callback) {
         url: selUrl,
         method: 'GET',
     }).done(function (d) {
-        changeProgressBar(50);
         if (typeof d === 'string')
             d = JSON.parse(d);
-        //   fillTemplate(d, coinId);
-
-        changeProgressBar(100);
-    });
-
-}
-function fromServer(callback) {
-    getProjectsFromServer(function (pData) {
-        window.cacheObj.projects = pData;
+        window.cacheObj.projects = d;
         window.cacheObj.lastFetch = new Date();
-        callback(pData);
-        console.log('from server')
+        changeProgressBar(50);
+        fillTemplate(d, coinId);
     });
-}
-function doMoreInfo(coinId) {
 
+}
+
+
+
+function getProjectsFromCache(coinId) {
+    fillTemplate(window.cacheObj.projects, coinId);
+}
+
+function doMoreInfo(coinId) {
     const lastTime = window.cacheObj.lastFetch;
     if (lastTime) {
         const dateNow = new Date();
         const diff = (dateNow.getTime() - lastTime.getTime()) / 1000;
         if (diff > 20) {
-            fromServer(callback);
+            getProjectsFromServer(coinId);
         } else {
-            callback(window.cacheObj.projects);
-            console.log('from cache')
+            getProjectsFromCache(coinId);//window.cacheObj.projects);
         }
     } else {
-        fromServer(callback);
+        getProjectsFromServer(coinId);
     }
-    fillTemplate(callback, coinId);
+
 }
 
     //******End More Info Button */
 
-}
+
