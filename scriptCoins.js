@@ -1,6 +1,7 @@
 
 var TemplateCoins;
 var MainData;
+window.cacheObj = window.cacheObj || {};
 
 //TODO:CACHE
 
@@ -87,7 +88,7 @@ function fillContent(DataRow) {
 
 
 function doBaseApi() {
-    
+
     $('#content').empty();
     //TODO:change url
     let selUrl = "tempData/baseData.json";
@@ -99,23 +100,23 @@ function doBaseApi() {
     }).done(function (d) {
         if (typeof d === 'string')
             d = JSON.parse(d);
-        
+
         MainData = d;
         loadPageCoins();
         if (selectedToggleArr.length > 0) { //Not first loading 
             checkedSelectedCoins();
         }
-    });  
+    });
 
 }
 
-function checkedSelectedCoins(){
-    for (i=0;i<selectedToggleArr.length;i++){
+function checkedSelectedCoins() {
+    for (i = 0; i < selectedToggleArr.length; i++) {
 
-    $('#' +selectedToggleArr[i]).attr("disabled", true);
-    $('#' +selectedToggleArr[i]).prop("checked", true);
+        $('#' + selectedToggleArr[i]).attr("disabled", true);
+        $('#' + selectedToggleArr[i]).prop("checked", true);
     }
-    
+
 
 }
 function doFilter(subStr) {
@@ -154,7 +155,20 @@ function doFilter(subStr) {
 
 }
 
-function doMoreInfo(coinId) {
+function fillTemplate(d, coinId) {
+    let t = TemplateMoreInfo;
+    t = t.replace('{{image}}', d.image.thumb);
+    t = t.replace('{{usd}}', d.market_data.current_price.usd);
+    t = t.replace('{{eur}}', d.market_data.current_price.eur);
+    t = t.replace('{{ils}}', d.market_data.current_price.ils);
+
+    $('#' + coinId + ' .card').html(t);
+}
+function getProjectsFromServer(callback) {
+    $.ajax('http://localhost:3000/project').done(function (d) {
+        callback(d);
+    });
+
 
     let selUrl = "/tempData/moreInfoBitcoin.json";
     //TODO:change url
@@ -165,22 +179,42 @@ function doMoreInfo(coinId) {
     $.ajax({
         url: selUrl,
         method: 'GET',
-
-
     }).done(function (d) {
         changeProgressBar(50);
         if (typeof d === 'string')
             d = JSON.parse(d);
+        //   fillTemplate(d, coinId);
 
-        let t = TemplateMoreInfo;
-        t = t.replace('{{image}}', d.image.thumb);
-        t = t.replace('{{usd}}', d.market_data.current_price.usd);
-        t = t.replace('{{eur}}', d.market_data.current_price.eur);
-        t = t.replace('{{ils}}', d.market_data.current_price.ils);
-
-        $('#' + coinId + ' .card').html(t);
         changeProgressBar(100);
     });
+
+}
+function fromServer(callback) {
+    getProjectsFromServer(function (pData) {
+        window.cacheObj.projects = pData;
+        window.cacheObj.lastFetch = new Date();
+        callback(pData);
+        console.log('from server')
+    });
+}
+function doMoreInfo(coinId) {
+
+    const lastTime = window.cacheObj.lastFetch;
+    if (lastTime) {
+        const dateNow = new Date();
+        const diff = (dateNow.getTime() - lastTime.getTime()) / 1000;
+        if (diff > 20) {
+            fromServer(callback);
+        } else {
+            callback(window.cacheObj.projects);
+            console.log('from cache')
+        }
+    } else {
+        fromServer(callback);
+    }
+    fillTemplate(callback, coinId);
+}
+
     //******End More Info Button */
 
 }
