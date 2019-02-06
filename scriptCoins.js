@@ -83,10 +83,11 @@ function fillContent(DataRow) {
 function doBaseApi() {
 
     $('#content').empty();
-     let selUrl = "tempData/baseData.json";
     changeProgressBar(70);
    // let selUrl = "https://api.coingecko.com/api/v3/coins/list";
-    $.ajax({
+   let selUrl = "tempData/baseData.json";
+  
+   $.ajax({
         url: selUrl,
         method: 'GET'
     }).done(function (d) {
