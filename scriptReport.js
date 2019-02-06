@@ -3,9 +3,8 @@ let coinsData = [];
 
 function loadChart() {
     //set the selected coins for pricemulti
-    //    coinsData = [];
     if (selectedToggleArr.length === 0) {
-        alert("there is no data to show")
+        alert("There is no data to show")
         changeProgressBar(100);
     }
     else loadDataChart(selectedToggleArr);

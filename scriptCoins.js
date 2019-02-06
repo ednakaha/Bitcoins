@@ -1,7 +1,8 @@
 
 var TemplateCoins;
 var MainData;
-window.cacheObj = window.cacheObj || {};
+var cacheObj = {};
+window.cacheArr = window.cacheArr || [];
 
 $.ajax({
     url: '/templates/tempCoins.html',
@@ -32,13 +33,6 @@ function ChangeStatusFilter() {
     }
 }
 
-/*/TO DO:ENTER
-$(document).on('keypress',function(e) {
-    if(e.which == 13) {
-        alert('You pressed enter!');
-    }
-});
-*/
 
 $("#mainContent").on("click", "#filterButton", function () {
     //on Filter Mode
@@ -72,6 +66,8 @@ function loadPageCoins() {
     });
 
 }
+
+
 function fillContent(DataRow) {
     let t = TemplateCoins;
     let regexSymbol = /{{symbol}}/g;
@@ -87,10 +83,9 @@ function fillContent(DataRow) {
 function doBaseApi() {
 
     $('#content').empty();
-    //TODO:change url
-    let selUrl = "tempData/baseData.json";
+     let selUrl = "tempData/baseData.json";
     changeProgressBar(70);
-    //let selUrl="https://api.coingecko.com/api/v3/coins/list";
+   // let selUrl = "https://api.coingecko.com/api/v3/coins/list";
     $.ajax({
         url: selUrl,
         method: 'GET'
@@ -163,10 +158,15 @@ function fillTemplate(d, coinId) {
     changeProgressBar(100);
 }
 
+
+function getProjectsFromCache(index, coinId) {
+    fillTemplate(window.cacheArr[index].projects, coinId);
+}
+
+
 function getProjectsFromServer(coinId) {
     let selUrl = "/tempData/moreInfoBitcoin.json";
-    //TODO:change url
-    // let selUrl = "https://api.coingecko.com/api/v3/coins/" + coinId;
+   // let selUrl = "https://api.coingecko.com/api/v3/coins/" + coinId;
 
 
     changeProgressBar(0);
@@ -177,29 +177,68 @@ function getProjectsFromServer(coinId) {
     }).done(function (d) {
         if (typeof d === 'string')
             d = JSON.parse(d);
-        window.cacheObj.projects = d;
-        window.cacheObj.lastFetch = new Date();
+        pushToCacheArray(coinId, d);
         changeProgressBar(50);
         fillTemplate(d, coinId);
     });
 
 }
 
+//*******cacheArray */
+function pushToCacheArray(coinId, d) {
+    //if the coin is exist, replace data , else push
+    IsExists = false;
 
+    cacheObj.id = coinId;
+    cacheObj.projects = d;
+    cacheObj.lastFetch = new Date();
 
-function getProjectsFromCache(coinId) {
-    fillTemplate(window.cacheObj.projects, coinId);
+    if (window.cacheArr.length > 0) {
+        for (s of window.cacheArr) {
+            if (s.id === coinId) {
+                s.d = d;
+                s.lastFetch = new Date();
+                isExists = true;
+            }
+        }
+        if (!(isExists)) {
+            window.cacheArr.push(cacheObj);
+        }
+    }
+    else { //first time
+        window.cacheArr.push(cacheObj);
+    }
 }
 
+function findCoinInCacheArray(coinId) {
+    let isExists = false;
+    for (i = 0; i < window.cacheArr.length; i++) {
+        if (window.cacheArr[i].id === coinId) {
+            isExists = true;
+            return i;
+        }
+    }
+    if (!(isExists)) {
+        return -1;
+    }
+}
+//**********End function of cacheArray */
+
+
+
 function doMoreInfo(coinId) {
-    const lastTime = window.cacheObj.lastFetch;
-    if (lastTime) {
+
+    let index = findCoinInCacheArray(coinId);
+    if (index > -1) {
+        const lastTime = window.cacheArr[index].lastFetch;
         const dateNow = new Date();
         const diff = (dateNow.getTime() - lastTime.getTime()) / 1000;
-        if (diff > 20) {
+        // todo:
+        //if (diff > 2 * 60) {
+        if (diff > 2 ) {
             getProjectsFromServer(coinId);
         } else {
-            getProjectsFromCache(coinId);//window.cacheObj.projects);
+            getProjectsFromCache(index, coinId);
         }
     } else {
         getProjectsFromServer(coinId);

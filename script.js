@@ -32,7 +32,6 @@ $('#mainNav>li>a').click(function (e) {
 });
 
 function changeProgressBar(current_progress) {
-    //TODO: cache local
     $("#dynamic")
         .css("width", current_progress + "%")
         .attr("aria-valuenow", current_progress)
@@ -65,8 +64,4 @@ $.ajax({
 $("#mainContent").on("click", "#buttonAbout", function () {
 
 });
-
-
-
-    //TODO:delete debugger
 
